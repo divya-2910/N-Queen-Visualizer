@@ -1,0 +1,9 @@
+.board-i{
+    height: 300px;
+    width: 300px;
+}
+#queen-icon{
+    height: 30px;
+    width: 30px;
+    color: white;
+}
