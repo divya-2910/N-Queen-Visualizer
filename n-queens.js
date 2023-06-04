@@ -68,6 +68,7 @@ class chessQueen{
             let curRow = table.firstChild.childNodes[dupRow];
             let curCol = curRow.getElementsByTagName("td")[dupCol];
             if(curCol.value == queenIcon){
+                
                 col.style.backgroundColor = "red";
                 col.innerHTML = "";
                 return false;
