@@ -1,226 +1,89 @@
-let number = document.getElementById("input-num");
-let slider = document.getElementById("speed-select");
-let startButton = document.getElementById("start");
-const queenIcon = '<i class="fas fa-chess-queen" id = "queen-icon"></i>';
-const num_boards = [0, 2, 1, 1, 3, 11, 5, 41, 93, 353];
-let no_of_queen_text = document.getElementById("no-of-arrangements");
-let chessBoards = document.getElementById("chess-boards");
-let n = number.value;
-
-let Board = 0;
-let nowState = {};
+'use strict'
+let number = document.getElementById('input-num');
+let startButton = document.getElementById('start');
+let speed = document.getElementById('speed-select');
+let n = 0;
+let num_boards = [0, 2, 1, 1, 3, 11, 5, 41, 93, 353];
+const queenIcon = '<i class="fas fa-chess-queen" style="color:#000"></i>';
 let q;
 
-class chessQueen{
+class nQueen{
     constructor(n){
-        this.state = Object.assign({},nowState);
-        this.arrangements = num_boards[n];
-        this.speed = slider*10;
-        this.uuid = [];
         this.n = n;
     }
 
-    startFunc = async() => {
-        Board = 0;
-        this.state[`${Board}`] = {};
-        number.disabled = true;
-        // await q.solve(0, n, Board);
-        await q.resetBoard(Board);
-        number.disabled = false;
+    waitTime = async() => {
+        await new Promise((done) => setTimeout(() => done(), 1500));
     }
-
-    resetBoard = async(i) => {
-        console.log('Inside resetBoard(i)')
-        for(let j = 0; j < n; j++){
-            let table = document.getElementById(`board-${i}`);
-            let row = table.firstChild.childNodes[j];
-            for(let k = 0; k < n; k++){
-                let cell = row.getElementsByTagName("td")[k];
-                if( j%2 ==0 ){
-                    (j+k)%2 == 0 ? cell.style.backgroundColor = "black" : cell.style.backgroundColor = "gray";
+    
+    resetColor = async(board, n) => {
+        console.log('Inside resetColor');
+        console.log(board);
+        let table = document.getElementById(`table-${board}`);
+        for(let i = 0; i < n; i++){
+            let row = table.firstChild.childNodes[i];
+            for(let j = 0; j < n; j++){
+                if((i+j)%2 == 0){
+                    row.getElementsByTagName("td")[j].style.backgroundColor = "green";
                 }
                 else{
-                    (j+k)%2 == 0 ? cell.style.backgroundColor = "gray" : cell.style.backgroundColor = "black";
+                    row.getElementsByTagName("td")[j].style.backgroundColor = "pink";
                 }
-                cell.style.border = "0.3px solid #373f51";
             }
-
         }
+        return;
     }
+};
 
-    waitFunc = async() => {
-        await new Promise((done) => setTimeout(() => done(), 400));
-    }
-
-    isValid = async(temp, r, c, n) => {
-        let table = getElementById(`board-${temp}`);
-        let row = table.firstChild.childNodes[r];
-        let col = row.getElementsByTagName("td")[c];
-        col.innerHTML = queenIcon;
-
-        await q.waitFunc();
-        console.log('Inside is Valid')
-        let dupRow = r;
-        let dupCol = c;
-        dupCol--;
-
-        while(dupCol >= 0){
-            let curRow = table.firstChild.childNodes[dupRow];
-            let curCol = curRow.getElementsByTagName("td")[dupCol];
-            if(curCol.value == queenIcon){
-                
-                col.style.backgroundColor = "red";
-                col.innerHTML = "";
-                return false;
-            }
-            curCol.style.backgroundColor = "pink";
-            await q.waitFunc();
-            dupCol--;
-        }
-
-        dupRow--;
-        dupCol = c-1;
-
-        while(dupCol >= 0 && dupRow >= 0){
-            let curRow = table.firstChild.childNodes[dupRow];
-            let curCol = curRow.getElementsByTagName("td")[dupCol];
-            if(curCol.value == queenIcon){
-                col.style.backgroundColor = "red";
-                col.innerHTML = "";
-                return false;
-            }
-            curCol.style.backgroundColor = "pink";
-            await q.waitFunc();
-            dupCol--;
-            dupRow--;
-        }
-
-        dupRow = r+1;
-        dupCol = c-1;
-
-        while(dupCol >= 0 && dupRow < n){
-            let curRow = table.firstChild.childNodes[dupRow];
-            let curCol = curRow.getElementsByTagName("td")[dupCol];
-            if(curCol.value == queenIcon){
-                col.style.backgroundColor = "red";
-                col.innerHTML = "";
-                return false;
-            }
-            curCol.style.backgroundColor = "pink";
-            await q.waitFunc();
-            dupCol--;
-            dupRow++;
-        }
-
-        return true;
-    }
-
-    solve = async(col, n, tempBoard) => {
-        if(col == n){
-            ++Board;
-            let table = document.getElementById(`board-${Board}`);
-            for (let k = 0; k < n; ++k) {
-                let row = table.firstChild.childNodes[k];
-                row.getElementsByTagName("td")[this.state[tempBoard][k]].innerHTML = queenIcon;
-            }
-            this.state[Board] = this.state[tempBoard];
-            return;
-        }
-        for(let r = 0; r < n; r++){
-            await q.waitFunc();
-            await q.resetBoard(r);
-
-            if( await q.isValid(tempBoard, r, col, n)){
-                await q.waitFunc();
-
-                let table = document.getElementById(`board-${tempBoard}`);
-                let row = table.firstChild.childNodes[r];
-                row.getElementsByTagName("td")[col].innerHTML = queenIcon;
-
-                this.state[tempBoard][col] = r;
-
-                if (await q.solve(col + 1, n, tempBoard))
-                    await q.clearColor(tempBoard);
-
-                await q.waitFunc();
-                tempBoard = Board;
-                // console.log(this.Board)
-                table = document.getElementById(`board-${tempBoard}`);
-                row = table.firstChild.childNodes[r];
-                row.getElementsByTagName("td")[col].innerHTML = "";
-
-                delete this.state[`${tempBoard}`][`${col}`];
-                
-            }
-        }
-    }
-}
-
-startButton.onclick = async function startDisplay(){
+startButton.onclick = async function startDisplay(n) {
     n = number.value;
-    q = new chessQueen(n);
+    q = new nQueen(n);
+    // console.log(n);
+    // console.log(speed.value);
+    
+    const no_of_arrangements = document.getElementById('no-of-arrangements');
+    const chess_boards = document.getElementById('chess-boards');
 
-    if(n > 9){
-        const warn = document.createElement("p");
-        warn.setAttribute("class", "queen-info");
-        warn.innerHTML = `Queen value is too big!`;
-        no_of_queen_text.appendChild(warn);
-        number.value = "";
-        return;
-    }
-    else if(n < 1){
-        const warn = document.createElement("p");
-        warn.setAttribute("class", "queen-info");
-        warn.innerHTML = `Queen value is too small!`;
-        no_of_queen_text.appendChild(warn);
-        number.value = "";
-        return;
+    while(chess_boards.childElementCount > 0){
+        chess_boards.removeChild(chess_boards.firstChild);
     }
 
-    while(chessBoards.children.length > 0){
-        chessBoards.removeChild(chessBoards.firstChild);
+    while(no_of_arrangements.childElementCount > 0){
+        no_of_arrangements.removeChild(no_of_arrangements.firstChild);
     }
 
-    while(no_of_queen_text.children.length > 0){
-        no_of_queen_text.removeChild(no_of_queen_text.lastChild);
-    }
+    let info = document.createElement('para');
+    info.setAttribute("id", "queen-info");
+    info.innerHTML = `For ${n}x${n} board, ${num_boards[n]-1} different arrangements are possible : `;
 
-    const para = document.createElement("p");
-    para.setAttribute("class", "queen-info");
-    para.innerHTML = `For ${n}x${n} board, ${num_boards[n]} arrangements are possible:`;
-    no_of_queen_text.appendChild(para);
+    no_of_arrangements.appendChild(info);
 
-    if(chessBoards.children.length == 0){
-        for(let i = 0; i < num_boards[n]; i++){
-            let div = document.createElement('div');
-            let board = document.createElement('table');
-            div.setAttribute("id",`div-${i}`);
-            board.setAttribute("id", `board-${i}`);
-            board.setAttribute("class", `board-i`)
-            chessBoards.appendChild(div);
-            div.appendChild(board);
-        }
-    }
-
-    for(let i = 0; i < num_boards[n]; i++){
-        let board = document.getElementById(`board-${i}`);
+    // console.log(num_boards[n]);
+    for(let i = 0; i < num_boards[n]-1; i++){
+        let div = document.createElement('div');
+        div.setAttribute("id",`div-${i}`);
+        div.setAttribute("class","each-div");
+        let table = document.createElement('table');
+        table.setAttribute("id", `table-${i}`);
+        table.setAttribute("class","each-board");
         for(let j = 0; j < n; j++){
-            let row = board.insertRow(j);
-            row.setAttribute("id", `row-${j}`);
+            let row = table.insertRow(j);
+            row.setAttribute("id",`row-${i}-${j}`);
             for(let k = 0; k < n; k++){
                 let cell = row.insertCell(k);
-                if( j%2 ==0 ){
-                    (j+k)%2 == 0 ? cell.style.backgroundColor = "black" : cell.style.backgroundColor = "gray";
+                if((j+k)%2 == 0){
+                    cell.style.backgroundColor = "green";
                 }
                 else{
-                    (j+k)%2 == 0 ? cell.style.backgroundColor = "gray" : cell.style.backgroundColor = "black";
+                    cell.style.backgroundColor = "pink";
                 }
-                cell.style.border = "0.3px solid #373f51";
+                cell.style.border = "0.3px solid black";
                 // cell.innerHTML = queenIcon;
             }
-
         }
-        await q.resetBoard(i);
+        div.appendChild(table);
+        chess_boards.appendChild(div);
+        await q.waitTime();
+        await q.resetColor(i, n);
     }
-    await q.startFunc();
-};
+}

@@ -1,6 +1,7 @@
-.board-i{
+.each-board{
     height: 300px;
     width: 300px;
+    margin: 30px;
 }
 #queen-icon{
     height: 30px;
