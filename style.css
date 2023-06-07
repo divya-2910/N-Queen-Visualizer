@@ -1,10 +1,85 @@
+body{
+    margin: 0;
+    padding: 0;
+    /* /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: 'ABeeZee'; 
+    font-weight: 400;
+}
+
+header{
+    /* background-color: black; */
+    color: rgb(17, 1, 137);
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 15px;
+    position: sticky;
+    font-size: 2.4em;
+    margin-bottom: 15px;
+    margin-left: 30px;
+}
+
 .each-board{
-    height: 300px;
-    width: 300px;
     margin: 30px;
+    border-collapse: collapse;
 }
-#queen-icon{
-    height: 30px;
-    width: 30px;
+.queen-icon{
+    height: 5px;
+    width: 1px;
+    margin: auto;
+}
+.queen-icon-black{
+    color: rgb(0, 0, 0);
+}
+.queen-icon-white{
+    color: rgb(255, 255, 255);
+}
+td{
+    width: 40px;
+    height: 55px;
+    /* text-align: center; */
+    font-size: 25px;
+    padding-left: 18px;
+    margin: 0px;
+    /* color: rgb(182, 221, 255); */
+}
+
+#chess-boards{
+    display: flex;
+    justify-content: center;
+    margin-right: 45px;
+    flex-wrap: wrap;
+}
+
+.user-input{
+    margin-top: 10px;
+}
+
+.start{
+    background-color: rgb(68, 179, 253);
     color: white;
+    height: 60px;
+    width: 100px;
+    border-radius: 10px;
+    border: 0px;
+    font-size: 24px;
 }
+
+.main{
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+
+#input-num{
+    border-radius: 5px;
+    height: 20px;
+    width: 100px;
+    font-size: 7px;
+}
+
+/* .slider{
+    margin-top: 50px;
+} */

@@ -4,7 +4,8 @@ let startButton = document.getElementById('start');
 let speed = document.getElementById('speed-select');
 let n = 0;
 let num_boards = [0, 2, 1, 1, 3, 11, 5, 41, 93, 353];
-const queenIcon = '<i class="fas fa-chess-queen" style="color:#000"></i>';
+const queenIcon1 = '<i class="fas fa-chess-queen queen-icon queen-icon-black"></i>';
+const queenIcon2 = '<i class="fas fa-chess-queen queen-icon queen-icon-white"></i>';
 let q, Board = 0;
 
 let nowState = {};
@@ -23,7 +24,7 @@ class nQueen{
     }
 
     waitTime = async() => {
-        await new Promise((done) => setTimeout(() => done(), 100));
+        await new Promise((done) => setTimeout(() => done(), speed.value*100));
     }
 
     solve = async(board, r, n) => {
@@ -32,7 +33,14 @@ class nQueen{
             let table = document.getElementById(`table-${Board}`);
             for(let m = 0; m < n; ++m){
                 let row = table.firstChild.childNodes[m];
-                row.getElementsByTagName("td")[this.state[board][m]].innerHTML = queenIcon;
+                let temp = row.getElementsByTagName("td")[this.state[board][m]];
+                if((m+this.state[board][m]) % 2 == 0){
+                    temp.innerHTML = queenIcon2;
+                }
+                else{
+                    temp.innerHTML = queenIcon1;
+                }
+                
             }
             this.state[Board] = this.state[board];
             return;
@@ -45,7 +53,14 @@ class nQueen{
                 await q.resetColor(board, n);
                 let table = document.getElementById(`table-${board}`);
                 let row = table.firstChild.childNodes[r];
-                row.getElementsByTagName("td")[c].innerHTML = queenIcon;
+                let temp = row.getElementsByTagName("td")[c];
+                if((r+c) % 2 == 0){
+                    temp.innerHTML = queenIcon2;
+                }
+                else{
+                    temp.innerHTML = queenIcon1;
+                }
+                
                 this.state[board][r] = c;
                 if(await q.solve(board, r+1, n))
                     await q.resetColor(board, n);
@@ -68,10 +83,10 @@ class nQueen{
             const row = table.firstChild.childNodes[i];
             for(let j = 0; j < n; j++){
                 if((i+j)%2 == 0){
-                    row.getElementsByTagName("td")[j].style.backgroundColor = "green";
+                    row.getElementsByTagName("td")[j].style.backgroundColor = "black";
                 }
                 else{
-                    row.getElementsByTagName("td")[j].style.backgroundColor = "pink";
+                    row.getElementsByTagName("td")[j].style.backgroundColor = "white";
                 }
             }
         }
@@ -82,7 +97,14 @@ class nQueen{
         const table = document.getElementById(`table-${board}`);
         const row = table.firstChild.childNodes[r];
         const col = row.getElementsByTagName("td")[c];
-        col.innerHTML = queenIcon;
+        // let temp = row.getElementsByTagName("td")[c];
+        if((r+c) % 2 == 0){
+            col.innerHTML = queenIcon2;
+        }
+        else{
+            col.innerHTML = queenIcon1;
+        }
+        // col.innerHTML = queenIcon;
         await q.waitTime();
         
         let dupRow, dupCol;
@@ -91,13 +113,13 @@ class nQueen{
             const checkRow = table.firstChild.childNodes[dupRow];
             const checkCol = checkRow.getElementsByTagName("td")[c];
 
-            if(checkCol.innerHTML == queenIcon){
-                checkCol.style.backgroundColor = "red";
+            if(checkCol.innerHTML == queenIcon1 || checkCol.innerHTML == queenIcon2){
+                checkCol.style.backgroundColor = "rgba(247, 104, 104, 0.7)";
                 col.innerHTML = "";
                 return false;
             }
 
-            checkCol.style.backgroundColor = "blue";
+            checkCol.style.backgroundColor = "rgb(102, 191, 250, 0.5)";
             await q.waitTime();
             dupRow--;
         }
@@ -108,13 +130,13 @@ class nQueen{
             const checkRow = table.firstChild.childNodes[dupRow];
             const checkCol = checkRow.getElementsByTagName("td")[dupCol];
 
-            if(checkCol.innerHTML == queenIcon){
-                checkCol.style.backgroundColor = "red";
+            if(checkCol.innerHTML == queenIcon1 || checkCol.innerHTML == queenIcon2){
+                checkCol.style.backgroundColor = "rgba(247, 104, 104, 0.7)";
                 col.innerHTML = "";
                 return false;
             }
 
-            checkCol.style.backgroundColor = "blue";
+            checkCol.style.backgroundColor = "rgb(102, 191, 250, 0.5)";
             await q.waitTime();
             dupRow--;
             dupCol--;
@@ -126,13 +148,13 @@ class nQueen{
             const checkRow = table.firstChild.childNodes[dupRow];
             const checkCol = checkRow.getElementsByTagName("td")[dupCol];
 
-            if(checkCol.innerHTML == queenIcon){
-                checkCol.style.backgroundColor = "red";
+            if(checkCol.innerHTML == queenIcon1 || checkCol.innerHTML == queenIcon2){
+                checkCol.style.backgroundColor = "rgba(247, 104, 104, 0.7)";
                 col.innerHTML = "";
                 return false;
             }
 
-            checkCol.style.backgroundColor = "blue";
+            checkCol.style.backgroundColor = "rgb(102, 191, 250, 0.5)";
             await q.waitTime();
             dupRow--;
             dupCol++;
@@ -144,6 +166,7 @@ class nQueen{
 };
 
 startButton.onclick = async function startDisplay(n) {
+    console.log(speed*100);
     n = number.value;
     q = new nQueen(n);
     // console.log(n);
@@ -180,12 +203,12 @@ startButton.onclick = async function startDisplay(n) {
             for(let k = 0; k < n; k++){
                 let cell = row.insertCell(k);
                 if((j+k)%2 == 0){
-                    cell.style.backgroundColor = "green";
+                    cell.style.backgroundColor = "black";
                 }
                 else{
-                    cell.style.backgroundColor = "pink";
+                    cell.style.backgroundColor = "white";
                 }
-                cell.style.border = "0.3px solid black";
+                cell.style.border = "2px solid black";
                 // cell.innerHTML = queenIcon;
             }
         }

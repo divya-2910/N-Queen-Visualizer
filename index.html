@@ -14,24 +14,25 @@
 <body>
     
     <header class="head" id="head-1">
-        <h1>
-            N Queens Visualizer
-        </h1>
+        <!-- <h1> -->
+            <i class="fas fa-chess-queen" style="color:rgb(17, 1, 137)"></i>&nbspN Queens Visualizer
+        <!-- </h1> -->
     </header>
-    <div class="main-con" id = "main-body">
-        <div>
+    <div class="main" id = "main-body">
+        <div class="user-input">
             <div class="input">
-                <input type="text" id="input-num"> Enter the number of Queens </input>
+                <p>Enter the number of queens:</p>
+                <input type="text" id="input-num"></input>
             </div>
-            <div>
+            <div class="slider">
                 <input type="range" id="speed-select" name="points" min="0" max="100" value="30">Select Speed</input>
             </div>
             <div id="progress-bar"></div>
-            <div>
+            <div class="start-button">
                 <button class="start" id="start">START</button>
             </div>
         </div>
-        <div>
+        <div class="main-content">
             <div id = "no-of-arrangements">
 
             </div>
