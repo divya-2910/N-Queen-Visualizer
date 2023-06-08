@@ -1,4 +1,3 @@
-// 'use strict'
 let number = document.getElementById('input-num');
 let startButton = document.getElementById('start');
 let speed = document.getElementById('speed-select');
@@ -9,6 +8,74 @@ const queenIcon2 = '<i class="fas fa-chess-queen queen-icon queen-icon-white"></
 let q, Board = 0;
 
 let nowState = {};
+
+document.getElementById("speed-select").oninput = function () {
+    var value = (this.value - this.min) / (this.max - this.min) * 100
+    this.style.background = 'linear-gradient(to right, #d274fb 0%, #d274fb ' + value + '%, #fff ' + value + '%, white 100%)'
+};
+
+startButton.onclick = async function startDisplay(n) {
+    console.log(speed * 100);
+    n = number.value;
+    q = new nQueen(n);
+    // console.log(n);
+    // console.log(speed.value);
+    if (n > 9) {
+        alert('Queen value is too large!!');
+    }
+    else if (n < 1) {
+        alert('Queen value is too small!!');
+    }
+    else {
+        const no_of_arrangements = document.getElementById('no-of-arrangements');
+        const chess_boards = document.getElementById('chess-boards');
+
+        while (chess_boards.childElementCount > 0) {
+            chess_boards.removeChild(chess_boards.firstChild);
+        }
+
+        while (no_of_arrangements.childElementCount > 0) {
+            no_of_arrangements.removeChild(no_of_arrangements.firstChild);
+        }
+
+        let info = document.createElement('para');
+        info.setAttribute("id", "queen-info");
+        info.innerHTML = `For ${n}x${n} board, ${num_boards[n] - 1} different arrangements are possible : `;
+
+        no_of_arrangements.appendChild(info);
+
+        // console.log(num_boards[n]);
+        for (let i = 0; i < num_boards[n]; i++) {
+            let div = document.createElement('div');
+            div.setAttribute("id", `div-${i}`);
+            div.setAttribute("class", "each-div");
+            let table = document.createElement('table');
+            table.setAttribute("id", `table-${i}`);
+            table.setAttribute("class", "each-board");
+            for (let j = 0; j < n; j++) {
+                let row = table.insertRow(j);
+                row.setAttribute("id", `row-${i}-${j}`);
+                for (let k = 0; k < n; k++) {
+                    let cell = row.insertCell(k);
+                    if ((j + k) % 2 == 0) {
+                        cell.style.backgroundColor = "black";
+                    }
+                    else {
+                        cell.style.backgroundColor = "white";
+                    }
+                    cell.style.border = "2px solid black";
+                    // cell.innerHTML = queenIcon;
+                }
+            }
+            div.appendChild(table);
+            chess_boards.appendChild(div);
+            await q.waitTime();
+            await q.resetColor(i, n);
+        }
+        await q.startFunc(n);
+    }
+}
+
 
 class nQueen {
     constructor(n) {
@@ -165,73 +232,6 @@ class nQueen {
     }
 };
 
-startButton.onclick = async function startDisplay(n) {
-    console.log(speed * 100);
-    n = number.value;
-    q = new nQueen(n);
-    // console.log(n);
-    // console.log(speed.value);
-    if (n > 9) {
-        alert('Queen value is too large!!');
-    }
-    else if (n < 1) {
-        alert('Queen value is too small!!');
-    }
-    else {
-        const no_of_arrangements = document.getElementById('no-of-arrangements');
-        const chess_boards = document.getElementById('chess-boards');
-
-        while (chess_boards.childElementCount > 0) {
-            chess_boards.removeChild(chess_boards.firstChild);
-        }
-
-        while (no_of_arrangements.childElementCount > 0) {
-            no_of_arrangements.removeChild(no_of_arrangements.firstChild);
-        }
-
-        let info = document.createElement('para');
-        info.setAttribute("id", "queen-info");
-        info.innerHTML = `For ${n}x${n} board, ${num_boards[n] - 1} different arrangements are possible : `;
-
-        no_of_arrangements.appendChild(info);
-
-        // console.log(num_boards[n]);
-        for (let i = 0; i < num_boards[n]; i++) {
-            let div = document.createElement('div');
-            div.setAttribute("id", `div-${i}`);
-            div.setAttribute("class", "each-div");
-            let table = document.createElement('table');
-            table.setAttribute("id", `table-${i}`);
-            table.setAttribute("class", "each-board");
-            for (let j = 0; j < n; j++) {
-                let row = table.insertRow(j);
-                row.setAttribute("id", `row-${i}-${j}`);
-                for (let k = 0; k < n; k++) {
-                    let cell = row.insertCell(k);
-                    if ((j + k) % 2 == 0) {
-                        cell.style.backgroundColor = "black";
-                    }
-                    else {
-                        cell.style.backgroundColor = "white";
-                    }
-                    cell.style.border = "2px solid black";
-                    // cell.innerHTML = queenIcon;
-                }
-            }
-            div.appendChild(table);
-            chess_boards.appendChild(div);
-            await q.waitTime();
-            await q.resetColor(i, n);
-        }
-        await q.startFunc(n);
-    }
 
 
-
-}
-
-document.getElementById("speed-select").oninput = function () {
-    var value = (this.value - this.min) / (this.max - this.min) * 100
-    this.style.background = 'linear-gradient(to right, #d274fb 0%, #d274fb ' + value + '%, #fff ' + value + '%, white 100%)'
-};
 
