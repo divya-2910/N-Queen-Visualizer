@@ -8,7 +8,7 @@ N-QUEEN(row, N, board)
     return TRUE
 
   for j in 1 to N
-    if !IS-VALID(row, j, board, N)
+    if IS-VALID(row, j, board, N)
       board[row][j] = Queen
 
       if N-QUEEN(row+1, N, board)
@@ -20,15 +20,15 @@ N-QUEEN(row, N, board)
   IS-VALID(i, j, board, N)
   // checking in the column j
   for k in 1 to i-1
-    if board[k][j]==1
-      return TRUE
+    if board[k][j] == Queen
+      return FALSE
 
   // checking upper right diagonal
   k = i-1
   l = j+1
   while k>=1 and l<=N
-    if board[k][l] == 1
-      return TRUE
+    if board[k][l] == Queen
+      return FALSE
     k=k+1
     l=l+1
 
@@ -36,12 +36,12 @@ N-QUEEN(row, N, board)
   k = i-1
   l = j-1
   while k>=1 and l>=1
-    if board[k][l] == 1
-      return TRUE
+    if board[k][l] == Queen
+      return FALSE
     k=k-1
     l=l-1
 
-  return FALSE
+  return TRUE
 ```
 # 🌐 Live Site
 See the demo here : https://divya2910-n-queens-visualizer.netlify.app/
